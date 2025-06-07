@@ -6,10 +6,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AppComponent } from './app.component';
+import { PostsModule } from './pages/posts/posts.module';
+import { NotificationsModule } from './pages/notifications/notifications.module';
+import { AuthModule } from './auth/auth.module';
+import { RouterOutlet } from '@angular/router';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PageNotFoundComponent],
   imports: [
+    RouterOutlet,
     BrowserModule,
     AppRoutingModule,
     NbThemeModule.forRoot({ name: 'default' }),
@@ -17,6 +23,10 @@ import { AppComponent } from './app.component';
     MatBadgeModule,
     MatButtonModule,
     MatIconModule,
+    MatButtonModule,
+    PostsModule,
+    NotificationsModule,
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

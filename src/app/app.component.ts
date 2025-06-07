@@ -8,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-blog';
+  currentYear: number = new Date().getFullYear();
 }

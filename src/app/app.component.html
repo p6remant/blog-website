@@ -1,15 +1,30 @@
 <nb-layout>
-  <nb-layout-header>
-    <h4>Logo</h4>
-    <div matBadge="0" matBadgeSize="large" class="demo-section my-red-badge">
-      notification
+  <nb-layout-header fixed>
+    <div class="header-container">
+      <a routerLink="" class="logo">Angular Blog</a>
+      <div class="menu-items">
+        <a routerLink="" routerLinkActive="active">Posts</a>
+        <a routerLink="/notifications">
+          <mat-icon
+            matBadge="0"
+            matBadgeSize="large"
+            class="demo-section"
+            aria-hidden="false"
+            aria-label="Notifications, 0 unread"
+          >
+            notifications
+          </mat-icon>
+        </a>
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+      </div>
     </div>
   </nb-layout-header>
 
-  <nb-layout-column>
-    <h2>Angular blog</h2>
-    <p>You can see your posts</p>
+  <nb-layout-column class="main-content">
+    <router-outlet></router-outlet>
   </nb-layout-column>
 
-  <nb-layout-footer>Footer</nb-layout-footer>
+  <nb-layout-footer>
+    <p>© {{ currentYear }} Angular Blog - All rights reserved</p>
+  </nb-layout-footer>
 </nb-layout>
