@@ -1,1 +1,58 @@
-<p>login works!</p>
+<!-- login.component.html -->
+<div class="form-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <h4 style="padding-bottom: 25px">Sign In</h4>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        autocomplete="username"
+      />
+      <div
+        class="error"
+        *ngIf="
+          loginForm.controls['username'].touched &&
+          loginForm.controls['username'].errors
+        "
+      >
+        <span *ngIf="loginForm.controls['username'].errors['required']">
+          Username is required
+        </span>
+        <span *ngIf="loginForm.controls['username'].errors['minlength']">
+          Minimum 8 characters required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="password-wrapper">
+        <input
+          [type]="hidePassword ? 'password' : 'text'"
+          id="password"
+          formControlName="password"
+        />
+      </div>
+      <div
+        class="error"
+        *ngIf="
+          loginForm.controls['password'].touched &&
+          loginForm.controls['password'].errors
+        "
+      >
+        <span *ngIf="loginForm.controls['password'].errors['required']">
+          Password is required
+        </span>
+        <span *ngIf="loginForm.controls['password'].errors['minlength']">
+          Minimum 8 characters required
+        </span>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
+      Sign In
+    </button>
+  </form>
+</div>
