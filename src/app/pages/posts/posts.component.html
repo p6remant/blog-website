@@ -55,6 +55,12 @@
       </div>
       <button (click)="goToDetails(post.id)">View Details</button>
       <button (click)="editPost(post.id)">Edit</button>
+      <button
+        (click)="deletePost(post.id)"
+        style="background-color: rgb(216, 5, 5)"
+      >
+        Delete
+      </button>
     </div>
     } @empty { @if(!loading) {
     <p>No posts Available!</p>

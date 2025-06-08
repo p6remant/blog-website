@@ -41,6 +41,7 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  // Method to fetch posts from the service
   fetchPosts() {
     this.loading = true;
     this.postlistService.getPosts().subscribe({
@@ -56,6 +57,7 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  // Method to handle form submission for creating a new post
   createPost() {
     if (this.postForm.invalid || !this.userId) return;
 
@@ -69,7 +71,7 @@ export class PostsComponent implements OnInit {
     this.authService.post<any>('/posts/add', payload).subscribe({
       next: (res) => {
         this.submitting = false;
-        //    console.log('Post created successfully:', res);
+        // console.log('Post created successfully:', res);
         this.postForm.reset();
         this.posts.push(res); // Add the new post to the list
         // this.fetchPosts(); // reload posts
@@ -81,10 +83,12 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  // Method to navigate to post details
   goToDetails(postId: number) {
     this.router.navigate(['/posts', postId]);
   }
 
+  // Method to edit a post
   editPost(postId: number) {
     console.log('Editing post with ID:', postId);
     const post = this.posts.find((p) => p.id === postId);
@@ -94,5 +98,23 @@ export class PostsComponent implements OnInit {
         queryParams: { title: post.title, body: post.body },
       });
     }
+  }
+
+  // Method to delete a post
+  deletePost(postId: number) {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+
+    this.postlistService.deletePost(postId).subscribe({
+      next: (res) => {
+        console.log('Post deleted successfully:', res);
+        alert('Post deleted:');
+        // Remove the deleted post from the list
+        // this.posts = this.posts.filter((post) => post.id !== postId);
+        // this.postsLength = this.posts.length;
+      },
+      error: (err) => {
+        console.error('Delete failed:', err);
+      },
+    });
   }
 }

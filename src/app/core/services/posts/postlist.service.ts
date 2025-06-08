@@ -20,7 +20,13 @@ export class PostlistService {
     return this.authService.get<Post>(`/posts/${id}`);
   }
 
+  // update a post
   updatePost(id: number, payload: Partial<Post>): Observable<Post> {
     return this.authService.patch<Post>(`/posts/${id}`, payload);
+  }
+
+  //delete a post
+  deletePost(id: number): Observable<Post> {
+    return this.authService.delete<Post>(`/posts/${id}`);
   }
 }

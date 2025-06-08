@@ -28,4 +28,8 @@ export class AuthService {
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.patch<T>(url, payload, { headers: this.headers });
   }
+  delete<T>(endpoint: string): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    return this.http.delete<T>(url, { headers: this.headers });
+  }
 }
