@@ -1,8 +1,46 @@
-h2 {
-  text-align: center;
+.loader {
+  font-size: 1.5rem;
 }
-p {
-  color: red;
-  font-size: 20px;
-  font-weight: bold;
+.post-container {
+  height: 100%;
+  width: 45%;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .loader {
+    font-size: 1.5rem;
+  }
+  h2 {
+    text-align: center;
+  }
+  .post {
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &:hover {
+      background-color: #f9f9f9;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .post-container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .post-container {
+    width: 85%;
+  }
 }

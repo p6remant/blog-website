@@ -1,2 +1,22 @@
-<h2>All Available Posts</h2>
-<p class="post">posts works!</p>
+<div class="post-container">
+  @if(loading) {
+  <p class="loader">Loading posts...</p>
+  } @if(!loading && postsLength > 0) {
+  <h2>Posts feed</h2>
+  }
+  <div>
+    @for (post of posts; track post.id) {
+    <div class="post" (click)="goToDetails(post.id)">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.body }}</p>
+      <div class="meta">
+        <span>Views: {{ post.views }}</span> |
+        <span>Likes: {{ post.reactions.likes }}</span> |
+        <span>Dislikes: {{ post.reactions.dislikes }}</span>
+      </div>
+    </div>
+    } @empty { @if(!loading) {
+    <p>No posts Available!</p>
+    } }
+  </div>
+</div>
