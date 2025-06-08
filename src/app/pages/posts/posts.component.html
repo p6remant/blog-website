@@ -37,7 +37,7 @@
   }
   <div>
     @for (post of posts; track post.id) {
-    <div class="post" (click)="goToDetails(post.id)">
+    <div class="post">
       <h3>{{ post.title }}</h3>
       <p class="truncated-body">
         {{
@@ -53,6 +53,8 @@
         <span>Dislikes: {{ post.reactions.dislikes }}</span>
         }
       </div>
+      <button (click)="goToDetails(post.id)">View Details</button>
+      <button (click)="editPost(post.id)">Edit</button>
     </div>
     } @empty { @if(!loading) {
     <p>No posts Available!</p>
