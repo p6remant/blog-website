@@ -84,4 +84,15 @@ export class PostsComponent implements OnInit {
   goToDetails(postId: number) {
     this.router.navigate(['/posts', postId]);
   }
+
+  editPost(postId: number) {
+    console.log('Editing post with ID:', postId);
+    const post = this.posts.find((p) => p.id === postId);
+    console.log('Found post:', post);
+    if (post) {
+      this.router.navigate(['/posts', postId, 'edit'], {
+        queryParams: { title: post.title, body: post.body },
+      });
+    }
+  }
 }
