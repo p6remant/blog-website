@@ -24,12 +24,28 @@ export class AuthService {
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.post<T>(url, payload, { headers: this.headers });
   }
+
+  //generic patch method
   patch<T>(endpoint: string, payload: any): Observable<T> {
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.patch<T>(url, payload, { headers: this.headers });
   }
+
+  // generic delete method
   delete<T>(endpoint: string): Observable<T> {
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.delete<T>(url, { headers: this.headers });
+  }
+
+  // Method to refresh the access token using the refresh token
+  refreshToken(): Observable<any> {
+    const url = `${this.baseUrl}/auth/refresh`;
+    const payload = {
+      refreshToken: sessionStorage.getItem('refreshToken'),
+    };
+
+    return this.http.post(url, payload, {
+      headers: this.headers,
+    });
   }
 }

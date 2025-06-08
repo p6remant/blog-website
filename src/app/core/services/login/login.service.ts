@@ -16,6 +16,10 @@ export class LoginService {
     return this.authService.post<LoginResponseTypes>('/auth/login', payload);
   }
 
+  refreshAccessToken(): Observable<any> {
+    return this.authService.refreshToken();
+  }
+
   // Individual setter methods
   setAccessToken(token: string): void {
     sessionStorage.setItem('accessToken', token);
@@ -53,9 +57,7 @@ export class LoginService {
 
   // Clear session storage
   clearSession(): void {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('username');
+    sessionStorage.clear();
   }
 
   // Check if user is authenticated
