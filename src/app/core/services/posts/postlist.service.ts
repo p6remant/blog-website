@@ -19,4 +19,8 @@ export class PostlistService {
   getPostById(id: number): Observable<Post> {
     return this.authService.get<Post>(`/posts/${id}`);
   }
+
+  updatePost(id: number, payload: Partial<Post>): Observable<Post> {
+    return this.authService.patch<Post>(`/posts/${id}`, payload);
+  }
 }

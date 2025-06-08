@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PostsComponent } from './posts.component';
 import { PostDetailsComponent } from './post-details/post-details.component';
+import { PostEditComponent } from './post-edit/post-edit.component';
 
 const routes: Routes = [
   {
@@ -9,6 +10,10 @@ const routes: Routes = [
     component: PostsComponent,
   },
   { path: 'posts/:id', component: PostDetailsComponent },
+  {
+    path: 'posts/:id/edit',
+    component: PostEditComponent,
+  },
   { path: '', redirectTo: '/posts', pathMatch: 'full' },
 ];
 

@@ -24,4 +24,8 @@ export class AuthService {
     const url = `${this.baseUrl}${endpoint}`;
     return this.http.post<T>(url, payload, { headers: this.headers });
   }
+  patch<T>(endpoint: string, payload: any): Observable<T> {
+    const url = `${this.baseUrl}${endpoint}`;
+    return this.http.patch<T>(url, payload, { headers: this.headers });
+  }
 }
