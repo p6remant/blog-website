@@ -1,34 +1,48 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from '../../core/services/login/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  hidePassword = true;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(8)]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      username: ['', [Validators.required, Validators.minLength(5)]],
+      password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
 
-  togglePasswordVisibility() {
-    this.hidePassword = !this.hidePassword;
-  }
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login data:', this.loginForm.value);
-      // handle login here
-    }
-  }
+      const payload = {
+        ...this.loginForm.value,
+        expiresInMins: 30,
+      };
 
-  resetForm() {
-    this.loginForm.reset();
+      this.loginService.login(payload).subscribe({
+        next: (res) => {
+          console.log('Login successful:', res);
+          this.loginService.setAccessToken(res.accessToken);
+          this.loginService.setRefreshToken(res.refreshToken);
+          this.loginService.setUsername(res.username);
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Login error:', err);
+          console.log('error details:', err.error.message);
+        },
+      });
+    }
   }
 }

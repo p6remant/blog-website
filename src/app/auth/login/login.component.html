@@ -21,7 +21,7 @@
           Username is required
         </span>
         <span *ngIf="loginForm.controls['username'].errors['minlength']">
-          Minimum 8 characters required
+          Minimum 5 characters required
         </span>
       </div>
     </div>
@@ -29,11 +29,7 @@
     <div class="form-group">
       <label for="password">Password</label>
       <div class="password-wrapper">
-        <input
-          [type]="hidePassword ? 'password' : 'text'"
-          id="password"
-          formControlName="password"
-        />
+        <input type="password" id="password" formControlName="password" />
       </div>
       <div
         class="error"
@@ -46,7 +42,7 @@
           Password is required
         </span>
         <span *ngIf="loginForm.controls['password'].errors['minlength']">
-          Minimum 8 characters required
+          Minimum 5 characters required
         </span>
       </div>
     </div>
