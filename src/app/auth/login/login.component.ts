@@ -36,6 +36,7 @@ export class LoginComponent {
           this.loginService.setAccessToken(res.accessToken);
           this.loginService.setRefreshToken(res.refreshToken);
           this.loginService.setUsername(res.username);
+          this.loginService.setUserId(res.id);
           this.router.navigate(['/']);
         },
         error: (err) => {

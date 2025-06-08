@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { PostsRoutingModule } from './posts-routing.module';
 import { PostsComponent } from './posts.component';
 import { RouterModule } from '@angular/router';
 import { PostDetailsComponent } from './post-details/post-details.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [],
+  declarations: [PostsComponent],
   imports: [
     CommonModule,
     RouterModule,
     PostsRoutingModule,
-    PostsComponent,
+    ReactiveFormsModule,
+    FormsModule,
     PostDetailsComponent,
   ],
 })

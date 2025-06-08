@@ -1,4 +1,35 @@
 <div class="post-container">
+  <!-- Create Post Form -->
+  <form [formGroup]="postForm" (ngSubmit)="createPost()" class="post-form">
+    <h2>Create a Post</h2>
+    <div>
+      <label>Title:</label>
+      <input type="text" formControlName="title" />
+      <div
+        *ngIf="postForm.get('title')?.invalid && postForm.get('title')?.touched"
+        class="error"
+      >
+        Title is required and must be alphanumeric.
+      </div>
+    </div>
+
+    <div>
+      <label>Body:</label>
+      <textarea formControlName="body"></textarea>
+      <div
+        *ngIf="postForm.get('body')?.invalid && postForm.get('body')?.touched"
+        class="error"
+      >
+        Body is required.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="postForm.invalid || submitting">
+      Submit
+    </button>
+  </form>
+
+  <!-- Posts Feed   -->
   @if(loading) {
   <p class="loader">Loading posts...</p>
   } @if(!loading && postsLength > 0) {
@@ -8,11 +39,19 @@
     @for (post of posts; track post.id) {
     <div class="post" (click)="goToDetails(post.id)">
       <h3>{{ post.title }}</h3>
-      <p>{{ post.body }}</p>
+      <p class="truncated-body">
+        {{
+          post.body.length > 100
+            ? post.body.substring(0, 100) + "..."
+            : post.body
+        }}
+      </p>
       <div class="meta">
-        <span>Views: {{ post.views }}</span> |
+        @if(post.views) {
+        <span>Views: {{ post.views }}</span> | } @if(post.reactions) {
         <span>Likes: {{ post.reactions.likes }}</span> |
         <span>Dislikes: {{ post.reactions.dislikes }}</span>
+        }
       </div>
     </div>
     } @empty { @if(!loading) {

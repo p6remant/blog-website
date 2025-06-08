@@ -29,6 +29,10 @@ export class LoginService {
     sessionStorage.setItem('username', username);
   }
 
+  setUserId(userId: string): void {
+    sessionStorage.setItem('userId', userId);
+  }
+
   // Getter methods
   getAccessToken(): string | null {
     return sessionStorage.getItem('accessToken');
@@ -40,6 +44,11 @@ export class LoginService {
 
   getUsername(): string | null {
     return sessionStorage.getItem('username');
+  }
+
+  getUserId(): string | null {
+    const userId = sessionStorage.getItem('userId');
+    return userId;
   }
 
   // Clear session storage
