@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { importProvidersFrom, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
@@ -11,6 +11,10 @@ import { NotificationsModule } from './pages/notifications/notifications.module'
 import { AuthModule } from './auth/auth.module';
 import { RouterOutlet } from '@angular/router';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -23,12 +27,11 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     MatBadgeModule,
     MatButtonModule,
     MatIconModule,
-    MatButtonModule,
     PostsModule,
     NotificationsModule,
     AuthModule,
   ],
-  providers: [],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
