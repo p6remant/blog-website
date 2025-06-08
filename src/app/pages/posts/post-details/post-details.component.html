@@ -1,0 +1,23 @@
+<!-- Loading indicator -->
+<p *ngIf="loading" class="status-message">Loading...</p>
+
+<!-- No post found -->
+<p *ngIf="!loading && !post" class="status-message">No post details found.</p>
+
+<!-- Post details -->
+
+<h2 *ngIf="!loading && post" style="text-align: center">Post Details</h2>
+<div *ngIf="!loading && post" class="post-details">
+  <h2>{{ post.title }}</h2>
+  <p>{{ post.body }}</p>
+
+  <div class="tags">
+    <span *ngFor="let tag of post.tags">#{{ tag }} </span>
+  </div>
+
+  <div class="meta">
+    <span>Views: {{ post.views }}</span> |
+    <span>Likes: {{ post.reactions.likes }}</span> |
+    <span>Dislikes: {{ post.reactions.dislikes }}</span>
+  </div>
+</div>
