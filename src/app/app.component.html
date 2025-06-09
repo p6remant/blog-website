@@ -4,13 +4,13 @@
       <a routerLink="" class="logo">Angular Blog</a>
       <div class="menu-items">
         <a routerLink="" routerLinkActive="active">Posts</a>
-        <a routerLink="/notifications">
+        <a [routerLink]="['/notifications']" [state]="{ messages: messages }">
           <mat-icon
-            matBadge="0"
+            [matBadge]="notificationLength"
             matBadgeSize="large"
             class="demo-section"
             aria-hidden="false"
-            aria-label="Notifications, 0 unread"
+            aria-label="Notifications, unread"
           >
             notifications
           </mat-icon>

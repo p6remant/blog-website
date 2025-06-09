@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AppComponent } from './app.component';
 import { PostsModule } from './pages/posts/posts.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsModule } from './pages/notifications/notifications.module';
 import { AuthModule } from './auth/auth.module';
 import { RouterOutlet } from '@angular/router';
@@ -27,6 +28,7 @@ import {
     MatBadgeModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
     PostsModule,
     NotificationsModule,
     AuthModule,

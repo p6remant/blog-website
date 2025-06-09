@@ -1,6 +1,11 @@
 <div class="post-container">
   <!-- Create Post Form -->
-  <form [formGroup]="postForm" (ngSubmit)="createPost()" class="post-form">
+  <form
+    *ngIf="userId"
+    [formGroup]="postForm"
+    (ngSubmit)="createPost()"
+    class="post-form"
+  >
     <h2>Create a Post</h2>
     <div>
       <label>Title:</label>
@@ -54,44 +59,55 @@
           <span>Dislikes: {{ post.reactions.dislikes }}</span>
           }
         </div>
-        <p (click)="toggleComments(post.id)">Comments</p>
+        <p (click)="toggleComments(post.id)" style="text-decoration: underline">
+          Comments
+        </p>
       </div>
       @if (selectedCommentPostId === post.id) {
       <div
         class="comment-box"
         style="border: 1px solid #ccc; padding: 10px; margin-top: 10px"
       >
-        <input
-          type="text"
-          [formControl]="initCommentForm(post.id)"
-          placeholder="Write a comment..."
-          (keydown.enter)="submitComment(post.id)"
-        />
-        <br />
-        <button (click)="submitComment(post.id)">Add</button>
+        <div *ngIf="userId">
+          <input
+            type="text"
+            [formControl]="initCommentForm(post.id)"
+            placeholder="Write a comment..."
+            (keydown.enter)="submitComment(post.id)"
+          />
+          <br />
+          <button (click)="submitComment(post.id)">Comment</button>
+        </div>
 
         <div class="comments-list" style="margin-top: 10px">
-          @if (comments[post.id] && comments[post.id].length > 0) { @for
+          @if(loading){
+          <p class="loader">Loading comments...</p>
+          } @if (comments[post.id] && comments[post.id].length > 0) { @for
           (comment of comments[post.id]; track comment.id) {
           <div class="comment">
             <strong>{{ comment.user.fullName }}</strong>
             <p>{{ comment.body }}</p>
           </div>
-          } } @else {
+          } } @else if(!loading && comments[post.id] && comments[post.id].length
+          === 0) {
           <p>No comments yet</p>
           }
         </div>
       </div>
       }
 
-      <button (click)="goToDetails(post.id)">View Details</button>
-      <button (click)="editPost(post.id)">Edit</button>
-      <button
-        (click)="deletePost(post.id)"
-        style="background-color: rgb(216, 5, 5)"
-      >
-        Delete
-      </button>
+      <div class="post-actions">
+        <button (click)="goToDetails(post.id)">View Details</button>
+        <div *ngIf="userId">
+          <button (click)="editPost(post.id)">Edit</button>
+          <button
+            (click)="deletePost(post.id)"
+            style="background-color: rgb(216, 5, 5)"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
     } @empty { @if(!loading) {
     <p>No posts Available!</p>

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormBuilder,
@@ -12,6 +12,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { LoginService } from '../../core/services/login/login.service';
 import { CommentsService } from '../../core/services/comments/comments.service';
 import { BlogComment } from '../../models/comments.modal';
+import { WebSocketService } from '../../core/services/web-socket/web-socket.service';
+import { NotificationService } from '../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-posts',
@@ -29,7 +31,7 @@ export class PostsComponent implements OnInit {
   selectedCommentPostId: number | null = null;
   commentsForms: { [postId: number]: FormControl } = {};
   comments: { [postId: number]: BlogComment[] } = {};
-  showComments: { [postId: number]: boolean } = {};
+  messages: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -37,16 +39,28 @@ export class PostsComponent implements OnInit {
     private postlistService: PostlistService,
     private authService: AuthService,
     private loginService: LoginService,
-    private commentsService: CommentsService
+    private commentsService: CommentsService,
+    private wsService: WebSocketService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
+    this.wsService.connect('wss://ws.ifelse.io');
+
+    this.wsService.getMessages().subscribe((message) => {
+      if (!message.includes('Request served by')) {
+        console.log('Received from WS:', message);
+        this.messages = [...this.messages, message];
+        this.notificationService.updateMessages(this.messages);
+        alert(message);
+        console.log(this.messages);
+      }
+    });
     this.userId = this.loginService.getUserId();
     this.initForm();
     this.fetchPosts();
   }
 
-  // Initialize the post form with validation
   initForm() {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
@@ -54,14 +68,13 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  // Initialize comment form control for a post
-  initCommentForm(postId: number) {
+  initCommentForm(postId: number): FormControl {
     if (!this.commentsForms[postId]) {
-      this.commentsForms[postId] = new FormControl('');
+      this.commentsForms[postId] = new FormControl('', Validators.required);
     }
     return this.commentsForms[postId];
   }
-  // Method to fetch posts from the service
+
   fetchPosts() {
     this.loading = true;
     this.postlistService.getPosts().subscribe({
@@ -77,7 +90,6 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  // Method to handle form submission for creating a new post
   createPost() {
     if (this.postForm.invalid || !this.userId) return;
 
@@ -87,14 +99,11 @@ export class PostsComponent implements OnInit {
       userId: Number(this.userId),
     };
 
-    console.log('Payload:', payload); // Log the payload
     this.authService.post<any>('/posts/add', payload).subscribe({
       next: (res) => {
         this.submitting = false;
-        // console.log('Post created successfully:', res);
         this.postForm.reset();
-        this.posts.push(res); // Add the new post to the list
-        // this.fetchPosts(); // reload posts
+        this.posts.push(res);
       },
       error: (err) => {
         this.submitting = false;
@@ -103,16 +112,12 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  // Method to navigate to post details
   goToDetails(postId: number) {
     this.router.navigate(['/posts', postId]);
   }
 
-  // Method to edit a post
   editPost(postId: number) {
-    console.log('Editing post with ID:', postId);
     const post = this.posts.find((p) => p.id === postId);
-    console.log('Found post:', post);
     if (post) {
       this.router.navigate(['/posts', postId, 'edit'], {
         queryParams: { title: post.title, body: post.body },
@@ -120,17 +125,14 @@ export class PostsComponent implements OnInit {
     }
   }
 
-  // Method to delete a post
   deletePost(postId: number) {
     if (!confirm('Are you sure you want to delete this post?')) return;
 
     this.postlistService.deletePost(postId).subscribe({
       next: (res) => {
-        console.log('Post deleted successfully:', res);
-        alert('Post deleted:');
-        // Remove the deleted post from the list
-        // this.posts = this.posts.filter((post) => post.id !== postId);
-        // this.postsLength = this.posts.length;
+        this.posts = this.posts.filter((post) => post.id !== postId);
+        this.postsLength = this.posts.length;
+        alert('Post deleted');
       },
       error: (err) => {
         console.error('Delete failed:', err);
@@ -138,7 +140,6 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  // event listener for clicks outside the comment box
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -152,13 +153,15 @@ export class PostsComponent implements OnInit {
     }
   }
 
-  // Method to fetch comments for a post
   fetchComments(postId: number): void {
+    this.loading = true;
     this.commentsService.getCommentsByPostId(postId).subscribe({
       next: (res) => {
+        this.loading = false;
         this.comments[postId] = res.comments;
       },
       error: (error) => {
+        this.loading = false;
         console.error('Error fetching comments:', error);
       },
     });
@@ -166,23 +169,18 @@ export class PostsComponent implements OnInit {
 
   toggleComments(postId: number): void {
     if (this.selectedCommentPostId === postId) {
-      this.selectedCommentPostId = null; // Close current
+      this.selectedCommentPostId = null;
     } else {
-      this.selectedCommentPostId = postId; // Open new
+      this.selectedCommentPostId = postId;
       if (!this.comments[postId]) {
-        this.fetchComments(postId); // Fetch only if not loaded
+        this.fetchComments(postId);
       }
     }
   }
 
-  // add comment on Add button click or Enter key press
   submitComment(postId: number) {
-    console.log('clickeddddd');
     const commentControl = this.initCommentForm(postId);
-    console.log('commentControl:', commentControl);
-    console.log('userId:', this.userId);
     if (!commentControl.valid || !this.userId) return;
-    console.log('clickeddddd1111');
 
     const commentText = commentControl.value.trim();
     if (!commentText) return;
@@ -191,10 +189,8 @@ export class PostsComponent implements OnInit {
       .addComment(postId, Number(this.userId), commentText)
       .subscribe({
         next: (res) => {
-          console.log('Comment added:', res);
-          alert('Comment added successfully!');
+          this.wsService.sendMessage(commentText);
           commentControl.reset();
-          // Optionally: reload comments or show confirmation
         },
         error: (err) => {
           console.error('Failed to add comment:', err);
