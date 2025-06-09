@@ -1,1 +1,11 @@
-<p>notifications works!</p>
+<h3>Notification List</h3>
+
+<ng-container *ngIf="messages.length > 0; else noNotification">
+  <p *ngFor="let msg of messages">
+    {{ msg }}
+  </p>
+</ng-container>
+
+<ng-template #noNotification>
+  <p>No notifications available!</p>
+</ng-template>
