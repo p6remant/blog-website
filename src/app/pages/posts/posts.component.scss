@@ -84,8 +84,16 @@
     }
 
     .meta {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 0.5rem;
       font-size: 0.9rem;
       color: #666;
+    }
+    .comment-box {
+      background: #f9f9f9;
+      position: relative;
+      z-index: 2;
     }
   }
 }

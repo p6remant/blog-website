@@ -47,11 +47,28 @@
         }}
       </p>
       <div class="meta">
-        @if(post.views) {
-        <span>Views: {{ post.views }}</span> | } @if(post.reactions) {
-        <span>Likes: {{ post.reactions.likes }}</span> |
-        <span>Dislikes: {{ post.reactions.dislikes }}</span>
-        }
+        <div>
+          @if(post.views) {
+          <span>Views: {{ post.views }}</span> | } @if(post.reactions) {
+          <span>Likes: {{ post.reactions.likes }}</span> |
+          <span>Dislikes: {{ post.reactions.dislikes }}</span>
+          }
+        </div>
+        <p (click)="toggleCommentBox(post.id)">Comments</p>
+      </div>
+      <div
+        *ngIf="selectedCommentPostId === post.id"
+        class="comment-box"
+        style="border: 1px solid #ccc; padding: 10px; margin-top: 10px"
+      >
+        <input
+          type="text"
+          [formControl]="initCommentForm(post.id)"
+          placeholder="Write a comment..."
+          (keydown.enter)="submitComment(post.id)"
+        />
+        <br />
+        <button (click)="submitComment(post.id)">Add</button>
       </div>
       <button (click)="goToDetails(post.id)">View Details</button>
       <button (click)="editPost(post.id)">Edit</button>

@@ -1,10 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Post } from '../../models/post.model';
 import { PostlistService } from '../../core/services/posts/postlist.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LoginService } from '../../core/services/login/login.service';
+import { CommentsService } from '../../core/services/comments/comments.service';
 
 @Component({
   selector: 'app-posts',
@@ -19,13 +25,16 @@ export class PostsComponent implements OnInit {
   postForm!: FormGroup;
   submitting = false;
   userId: string | null = null;
+  selectedCommentPostId: number | null = null;
+  commentsForms: { [postId: number]: FormControl } = {};
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private postlistService: PostlistService,
     private authService: AuthService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private commentsService: CommentsService
   ) {}
 
   ngOnInit() {
@@ -34,6 +43,7 @@ export class PostsComponent implements OnInit {
     this.fetchPosts();
   }
 
+  // Initialize the post form with validation
   initForm() {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')]],
@@ -41,6 +51,13 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  // Initialize comment form control for a post
+  initCommentForm(postId: number) {
+    if (!this.commentsForms[postId]) {
+      this.commentsForms[postId] = new FormControl('');
+    }
+    return this.commentsForms[postId];
+  }
   // Method to fetch posts from the service
   fetchPosts() {
     this.loading = true;
@@ -116,5 +133,52 @@ export class PostsComponent implements OnInit {
         console.error('Delete failed:', err);
       },
     });
+  }
+
+  // event listener for clicks outside the comment box
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const commentBox = document.querySelector('.comment-box');
+    if (
+      this.selectedCommentPostId &&
+      commentBox &&
+      !commentBox.contains(target)
+    ) {
+      this.selectedCommentPostId = null;
+    }
+  }
+
+  //show and hide comment box
+  toggleCommentBox(postId: number): void {
+    this.selectedCommentPostId =
+      this.selectedCommentPostId === postId ? null : postId;
+  }
+
+  // add comment on Add button click or Enter key press
+  submitComment(postId: number) {
+    console.log('clickeddddd');
+    const commentControl = this.initCommentForm(postId);
+    console.log('commentControl:', commentControl);
+    console.log('userId:', this.userId);
+    if (!commentControl.valid || !this.userId) return;
+    console.log('clickeddddd1111');
+
+    const commentText = commentControl.value.trim();
+    if (!commentText) return;
+
+    this.commentsService
+      .addComment(postId, Number(this.userId), commentText)
+      .subscribe({
+        next: (res) => {
+          console.log('Comment added:', res);
+          alert('Comment added successfully!');
+          commentControl.reset();
+          // Optionally: reload comments or show confirmation
+        },
+        error: (err) => {
+          console.error('Failed to add comment:', err);
+        },
+      });
   }
 }
