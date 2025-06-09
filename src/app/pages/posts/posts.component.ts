@@ -11,6 +11,7 @@ import { PostlistService } from '../../core/services/posts/postlist.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LoginService } from '../../core/services/login/login.service';
 import { CommentsService } from '../../core/services/comments/comments.service';
+import { BlogComment } from '../../models/comments.modal';
 
 @Component({
   selector: 'app-posts',
@@ -27,6 +28,8 @@ export class PostsComponent implements OnInit {
   userId: string | null = null;
   selectedCommentPostId: number | null = null;
   commentsForms: { [postId: number]: FormControl } = {};
+  comments: { [postId: number]: BlogComment[] } = {};
+  showComments: { [postId: number]: boolean } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -149,10 +152,27 @@ export class PostsComponent implements OnInit {
     }
   }
 
-  //show and hide comment box
-  toggleCommentBox(postId: number): void {
-    this.selectedCommentPostId =
-      this.selectedCommentPostId === postId ? null : postId;
+  // Method to fetch comments for a post
+  fetchComments(postId: number): void {
+    this.commentsService.getCommentsByPostId(postId).subscribe({
+      next: (res) => {
+        this.comments[postId] = res.comments;
+      },
+      error: (error) => {
+        console.error('Error fetching comments:', error);
+      },
+    });
+  }
+
+  toggleComments(postId: number): void {
+    if (this.selectedCommentPostId === postId) {
+      this.selectedCommentPostId = null; // Close current
+    } else {
+      this.selectedCommentPostId = postId; // Open new
+      if (!this.comments[postId]) {
+        this.fetchComments(postId); // Fetch only if not loaded
+      }
+    }
   }
 
   // add comment on Add button click or Enter key press
