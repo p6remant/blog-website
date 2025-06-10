@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div>
+    <div style="margin-bottom: 10px">
       <label>Body:</label>
       <textarea formControlName="body"></textarea>
       <div
@@ -76,6 +76,7 @@
             [formControl]="initCommentForm(post.id)"
             placeholder="Write a comment..."
             (keydown.enter)="submitComment(post.id)"
+            style="margin-bottom: 10px"
           />
           <br />
           <app-reusable-button
@@ -102,7 +103,7 @@
       </div>
       }
 
-      <div class="post-actions">
+      <div class="post-actions" style="margin-top: 10px">
         <app-reusable-button
           text="View Details"
           (clicked)="goToDetails(post.id)"
