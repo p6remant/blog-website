@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { PostlistService } from '../../../core/services/posts/postlist.service';
+import { ToastService } from '../../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-post-edit',
@@ -25,7 +26,8 @@ export class PostEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private postService: PostlistService
+    private postService: PostlistService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -63,13 +65,18 @@ export class PostEditComponent implements OnInit {
     this.postService.updatePost(this.postId, updatedData).subscribe({
       next: (response) => {
         this.submitting = false;
-        alert('Post updated successfully!');
+        console.log('Post updated successfully:', response);
+        // alert('Post updated successfully!');
         // console.log('Updated Post:', response);
+        this.toast.success('Post updated successfully!');
         this.router.navigate(['/']);
       },
       error: (err) => {
-        console.error('Update failed:', err);
+        //  console.error('Update failed:', err);
         this.submitting = false;
+        this.toast.error(
+          err.error.message || 'Failed to update post. Please try again later.'
+        );
       },
     });
   }

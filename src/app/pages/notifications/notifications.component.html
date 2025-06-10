@@ -1,11 +1,16 @@
-<h3>Notification List</h3>
+<h3 *ngIf="messages.length > 0" style="text-align: center">
+  Notification List
+</h3>
 
 <ng-container *ngIf="messages.length > 0; else noNotification">
-  <p *ngFor="let msg of messages">
-    {{ msg }}
+  <p
+    *ngFor="let msg of messages; let i = index"
+    style="font-size: 16px; text-align: center"
+  >
+    {{ i + 1 }}. {{ msg }}
   </p>
 </ng-container>
 
 <ng-template #noNotification>
-  <p>No notifications available!</p>
+  <p style="text-align: center">No notifications available!</p>
 </ng-template>

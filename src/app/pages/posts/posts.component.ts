@@ -14,6 +14,7 @@ import { CommentsService } from '../../core/services/comments/comments.service';
 import { BlogComment } from '../../models/comments.modal';
 import { WebSocketService } from '../../core/services/web-socket/web-socket.service';
 import { NotificationService } from '../../core/services/notification/notification.service';
+import { ToastService } from '../../core/services/toast/toast.service';
 
 @Component({
   selector: 'app-posts',
@@ -41,7 +42,8 @@ export class PostsComponent implements OnInit {
     private loginService: LoginService,
     private commentsService: CommentsService,
     private wsService: WebSocketService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -49,11 +51,12 @@ export class PostsComponent implements OnInit {
 
     this.wsService.getMessages().subscribe((message) => {
       if (!message.includes('Request served by')) {
-        console.log('Received from WS:', message);
+        //console.log('Received from WS:', message);
         this.messages = [...this.messages, message];
         this.notificationService.updateMessages(this.messages);
-        alert(message);
-        console.log(this.messages);
+        // alert(message);
+        this.toast.success('New comment added!');
+        //console.log(this.messages);
       }
     });
     this.userId = this.loginService.getUserId();
@@ -104,10 +107,12 @@ export class PostsComponent implements OnInit {
         this.submitting = false;
         this.postForm.reset();
         this.posts.push(res);
+        this.toast.success('Post created successfully');
       },
       error: (err) => {
         this.submitting = false;
         console.error('Post creation failed:', err);
+        this.toast.error(err.error.message || 'Failed to create post');
       },
     });
   }
@@ -132,10 +137,12 @@ export class PostsComponent implements OnInit {
       next: (res) => {
         this.posts = this.posts.filter((post) => post.id !== postId);
         this.postsLength = this.posts.length;
-        alert('Post deleted');
+        this.toast.success('Post deleted successfully');
+        // alert('Post deleted');
       },
       error: (err) => {
         console.error('Delete failed:', err);
+        this.toast.error(err.error.message || 'Failed to delete post');
       },
     });
   }
@@ -193,7 +200,10 @@ export class PostsComponent implements OnInit {
           commentControl.reset();
         },
         error: (err) => {
-          console.error('Failed to add comment:', err);
+          this.toast.error(
+            err.error.message ||
+              'Failed to add comment. Please try again later.'
+          );
         },
       });
   }
