@@ -106,7 +106,7 @@ export class PostsComponent implements OnInit {
       next: (res) => {
         this.submitting = false;
         this.postForm.reset();
-        this.posts.push(res);
+        console.log('Post created successfully:', res);
         this.toast.success('Post created successfully');
       },
       error: (err) => {

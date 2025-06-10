@@ -12,7 +12,7 @@ export class PostlistService {
   // get all posts
   // Returns an Observable of PostsResponse
   getPosts(): Observable<PostsResponse> {
-    return this.authService.get<PostsResponse>('/posts/?limit=0');
+    return this.authService.get<PostsResponse>('/posts/');
   }
 
   // get posts by userId

@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { PostDetailsComponent } from './post-details/post-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PostEditComponent } from './post-edit/post-edit.component';
+import { ButtonModule } from '../../shared/components/button/button.module';
 
 @NgModule({
   declarations: [PostsComponent],
@@ -17,6 +18,7 @@ import { PostEditComponent } from './post-edit/post-edit.component';
     FormsModule,
     PostDetailsComponent,
     PostEditComponent,
+    ButtonModule,
   ],
 })
 export class PostsModule {}

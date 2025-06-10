@@ -1,0 +1,51 @@
+button {
+  margin-top: 1rem;
+  margin-right: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Variants */
+.default {
+  background-color: #1976d2;
+  color: white;
+}
+
+.default:hover:enabled {
+  background-color: #1565c0;
+}
+
+.submit {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit:hover:enabled {
+  background-color: #0069d9;
+}
+
+.delete {
+  background-color: rgb(216, 5, 5);
+  color: white;
+}
+
+.delete:hover:enabled {
+  background-color: rgb(180, 0, 0);
+}
+
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+.comment {
+  background-color: #4caf50; /* Green */
+  color: white;
+}
+
+.comment:hover:enabled {
+  background-color: #388e3c;
+}

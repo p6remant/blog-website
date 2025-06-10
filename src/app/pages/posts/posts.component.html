@@ -28,10 +28,12 @@
         Body is required.
       </div>
     </div>
-
-    <button type="submit" [disabled]="postForm.invalid || submitting">
-      Submit
-    </button>
+    <app-reusable-button
+      text="Submit"
+      type="submit"
+      [disabled]="postForm.invalid || submitting"
+      variant="submit"
+    ></app-reusable-button>
   </form>
 
   <!-- Posts Feed   -->
@@ -76,7 +78,11 @@
             (keydown.enter)="submitComment(post.id)"
           />
           <br />
-          <button (click)="submitComment(post.id)">Comment</button>
+          <app-reusable-button
+            text="Comment"
+            variant="comment"
+            (clicked)="submitComment(post.id)"
+          ></app-reusable-button>
         </div>
 
         <div class="comments-list" style="margin-top: 10px">
@@ -97,15 +103,21 @@
       }
 
       <div class="post-actions">
-        <button (click)="goToDetails(post.id)">View Details</button>
+        <app-reusable-button
+          text="View Details"
+          (clicked)="goToDetails(post.id)"
+        ></app-reusable-button>
         <div *ngIf="userId">
-          <button (click)="editPost(post.id)">Edit</button>
-          <button
-            (click)="deletePost(post.id)"
-            style="background-color: rgb(216, 5, 5)"
-          >
-            Delete
-          </button>
+          <app-reusable-button
+            *ngIf="post.userId === +userId"
+            text="Edit"
+            (clicked)="editPost(post.id)"
+          ></app-reusable-button>
+          <app-reusable-button
+            text="Delete"
+            variant="delete"
+            (clicked)="deletePost(post.id)"
+          ></app-reusable-button>
         </div>
       </div>
     </div>
