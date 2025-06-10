@@ -14,7 +14,7 @@ This Angular project is a simple blog-like application that allows authenticated
 - Angular CLI
 - TypeScript
 - RxJS
-- SCSS/CSS
+- SCSS
 - HTML
 
 ### Installation
