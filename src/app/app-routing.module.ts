@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { AuthGuard } from './core/guards/auth.guard';
+import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
   {
@@ -11,6 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'notifications',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/notifications/notifications.module').then(
         (m) => m.NotificationsModule
@@ -19,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    component: LoginComponent,
   },
   {
     path: '**',
