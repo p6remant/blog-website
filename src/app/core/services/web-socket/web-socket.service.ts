@@ -37,6 +37,13 @@ export class WebSocketService {
     }
   }
 
+  disconnect(): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.close();
+    }
+    console.log('WebSocket disconnected');
+  }
+
   getMessages(): Observable<string> {
     return this.messageSubject.asObservable();
   }

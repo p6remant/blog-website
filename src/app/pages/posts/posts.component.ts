@@ -15,6 +15,7 @@ import { BlogComment } from '../../models/comments.modal';
 import { WebSocketService } from '../../core/services/web-socket/web-socket.service';
 import { NotificationService } from '../../core/services/notification/notification.service';
 import { ToastService } from '../../core/services/toast/toast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-posts',
@@ -33,6 +34,7 @@ export class PostsComponent implements OnInit {
   commentsForms: { [postId: number]: FormControl } = {};
   comments: { [postId: number]: BlogComment[] } = {};
   messages: any[] = [];
+  private wsSubscription?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -49,14 +51,11 @@ export class PostsComponent implements OnInit {
   ngOnInit() {
     this.wsService.connect('wss://ws.ifelse.io');
 
-    this.wsService.getMessages().subscribe((message) => {
+    this.wsSubscription = this.wsService.getMessages().subscribe((message) => {
       if (!message.includes('Request served by')) {
-        //console.log('Received from WS:', message);
         this.messages = [...this.messages, message];
         this.notificationService.updateMessages(this.messages);
-        // alert(message);
         this.toast.success('New comment added!');
-        //console.log(this.messages);
       }
     });
     this.userId = this.loginService.getUserId();
@@ -206,5 +205,14 @@ export class PostsComponent implements OnInit {
           );
         },
       });
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from WebSocket messages to prevent memory leaks
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
+    }
+    // disconnect the WebSocket connection
+    this.wsService.disconnect();
   }
 }
