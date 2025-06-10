@@ -16,6 +16,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
+import { ButtonModule } from './shared/components/button/button.module';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -32,6 +33,7 @@ import {
     PostsModule,
     NotificationsModule,
     AuthModule,
+    ButtonModule,
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent],

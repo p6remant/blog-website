@@ -15,7 +15,21 @@
             notifications
           </mat-icon>
         </a>
-        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <ng-container *ngIf="isLoggedIn; else loginLink">
+          <div style="display: flex; align-items: center">
+            <img [src]="userAvatar" alt="User Avatar" class="avatar" />
+            <app-reusable-button
+              text="Logout"
+              type="submit"
+              (click)="logout()"
+              variant="submit"
+            ></app-reusable-button>
+          </div>
+        </ng-container>
+
+        <ng-template #loginLink>
+          <a routerLink="/login" routerLinkActive="active">Sign In</a>
+        </ng-template>
       </div>
     </div>
   </nb-layout-header>

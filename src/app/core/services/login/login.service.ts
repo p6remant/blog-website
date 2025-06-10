@@ -37,6 +37,14 @@ export class LoginService {
     sessionStorage.setItem('userId', userId);
   }
 
+  setUserImage(imageUrl: string): void {
+    sessionStorage.setItem('userImage', imageUrl);
+  }
+
+  getUserImage(): string | null {
+    return sessionStorage.getItem('userImage');
+  }
+
   // Getter methods
   getAccessToken(): string | null {
     return sessionStorage.getItem('accessToken');
@@ -58,6 +66,7 @@ export class LoginService {
   // Clear session storage
   clearSession(): void {
     sessionStorage.clear();
+    window.location.href = '/login';
   }
 
   // Check if user is authenticated

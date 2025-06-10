@@ -39,8 +39,9 @@ export class LoginComponent {
           this.loginService.setRefreshToken(res.refreshToken);
           this.loginService.setUsername(res.username);
           this.loginService.setUserId(res.id);
+          this.loginService.setUserImage(res.image);
           this.toast.success('Login successful');
-          this.router.navigate(['/']);
+          window.location.href = '/';
         },
         error: (err) => {
           //console.error('Login error:', err);

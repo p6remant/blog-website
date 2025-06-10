@@ -11,4 +11,5 @@ export interface LoginResponseTypes {
   accessToken: string;
   refreshToken: string;
   id: string;
+  image: string;
 }
