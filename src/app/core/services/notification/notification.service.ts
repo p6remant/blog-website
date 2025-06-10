@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NotificationService {
   private _notificationCount = new BehaviorSubject<number>(0);
-  notificationCount$ = this._notificationCount.asObservable();
+  notificationCount$ = this._notificationCount.asObservable(); //$ is used to denote an observable variable
 
   private _messages = new BehaviorSubject<string[]>([]);
   messages$ = this._messages.asObservable();
