@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "vercel-build": "echo \"export const environment = { production: true, apiBaseUrl: '${NG_APP_API_BASE_URL}' };\" > src/environments/environment.prod.ts && ng build --configuration production"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
